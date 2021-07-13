@@ -1,8 +1,8 @@
-package com.rpaoletti.mismatchdetector.service;
+package com.rpaoletti.mismatchresolver.service;
 
-import com.rpaoletti.mismatchdetector.architecture.Channel;
-import com.rpaoletti.mismatchdetector.architecture.IntegrationArchitecture;
-import com.rpaoletti.mismatchdetector.architecture.IntegrationNode;
+import com.rpaoletti.mismatchresolver.architecture.Channel;
+import com.rpaoletti.mismatchresolver.architecture.IntegrationArchitecture;
+import com.rpaoletti.mismatchresolver.architecture.IntegrationNode;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

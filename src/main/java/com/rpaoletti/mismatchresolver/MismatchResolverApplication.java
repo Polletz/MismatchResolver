@@ -1,17 +1,9 @@
-package com.rpaoletti.mismatchdetector;
+package com.rpaoletti.mismatchresolver;
 
-import com.rpaoletti.mismatchdetector.architecture.*;
-import com.rpaoletti.mismatchdetector.utils.Utils;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @SpringBootApplication
-public class MismatchDetectorApplication {
+public class MismatchResolverApplication {
 
     public static void main(String[] args) {
 
@@ -90,6 +82,6 @@ public class MismatchDetectorApplication {
         for (SimpleNamedType s : Utils.leaves(ct1))
             System.out.println(s.getName() + ", " + s.getXMLType());
 */
-        //SpringApplication.run(MismatchDetectorApplication.class, args);
+        //SpringApplication.run(MismatchResolverApplication.class, args);
     }
 }

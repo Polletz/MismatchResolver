@@ -1,4 +1,4 @@
-package com.rpaoletti.mismatchdetector.utils;
+package com.rpaoletti.mismatchresolver.utils;
 
 public class IDGenerator {
     int uniqueId;

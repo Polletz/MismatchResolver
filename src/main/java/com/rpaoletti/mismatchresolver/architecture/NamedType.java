@@ -1,6 +1,4 @@
-package com.rpaoletti.mismatchdetector.architecture;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.rpaoletti.mismatchresolver.architecture;
 
 public interface NamedType {
 

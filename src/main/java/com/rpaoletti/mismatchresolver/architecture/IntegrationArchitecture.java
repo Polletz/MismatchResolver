@@ -1,7 +1,7 @@
-package com.rpaoletti.mismatchdetector.architecture;
+package com.rpaoletti.mismatchresolver.architecture;
 
-import com.rpaoletti.mismatchdetector.utils.IDGenerator;
-import com.rpaoletti.mismatchdetector.utils.Utils;
+import com.rpaoletti.mismatchresolver.utils.IDGenerator;
+import com.rpaoletti.mismatchresolver.utils.Utils;
 
 import java.util.*;
 

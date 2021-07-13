@@ -1,8 +1,8 @@
-package com.rpaoletti.mismatchdetector.api;
+package com.rpaoletti.mismatchresolver.api;
 
-import com.rpaoletti.mismatchdetector.architecture.Channel;
-import com.rpaoletti.mismatchdetector.architecture.IntegrationNode;
-import com.rpaoletti.mismatchdetector.service.IntegrationService;
+import com.rpaoletti.mismatchresolver.architecture.Channel;
+import com.rpaoletti.mismatchresolver.architecture.IntegrationNode;
+import com.rpaoletti.mismatchresolver.service.IntegrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
