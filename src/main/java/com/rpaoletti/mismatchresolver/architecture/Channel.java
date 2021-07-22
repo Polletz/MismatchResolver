@@ -6,10 +6,10 @@ public class Channel {
 
     private final int source;
     //@JsonProperty
-    private final NamedType sourceType;
+    private NamedType sourceType;
     private final int dest;
     //@JsonProperty
-    private final NamedType destType;
+    private NamedType destType;
 
     public Channel(
             @JsonProperty int source,
@@ -21,6 +21,14 @@ public class Channel {
         this.sourceType = sourceType;
         this.dest = dest;
         this.destType = destType;
+    }
+
+    public Channel(
+            @JsonProperty int source,
+            @JsonProperty int dest
+     ) {
+        this.source = source;
+        this.dest = dest;
     }
 
     public int getSource() {

@@ -1,6 +1,14 @@
 package com.rpaoletti.mismatchresolver;
 
+import com.rpaoletti.routeparser.Route;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @SpringBootApplication
 public class MismatchResolverApplication {
@@ -82,6 +90,14 @@ public class MismatchResolverApplication {
         for (SimpleNamedType s : Utils.leaves(ct1))
             System.out.println(s.getName() + ", " + s.getXMLType());
 */
+        try {
+            String route = new String(Files.readAllBytes(Paths.get("src\\main\\java\\com\\rpaoletti\\examples\\RouteExample.java")), StandardCharsets.UTF_8);
+            Route r = new Route(route);
+            r.parseRoute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //SpringApplication.run(MismatchResolverApplication.class, args);
     }
 }
