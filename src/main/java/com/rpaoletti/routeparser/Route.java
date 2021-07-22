@@ -75,81 +75,41 @@ public class Route {
     }
 
     private void getNewNodesAndChannels(List<Node> routes){
-        List<String> commands = getCommands(routes);
-        LinkedList<ChoiceStruct> choiceQueue = new LinkedList<>();
-        int choiceCount = 0;
-        boolean endFlag = false;
-        int previousNode = -1;
-        boolean startChoice = false;
-        for (int i = commands.size()-1; i >= 0; i--) {
-            for (String nodeCommand : Utils.NodeCommands)
-                if (commands.get(i).startsWith(nodeCommand)) {
-                    String arguments = commands.get(i).substring(nodeCommand.length()+1);
-                    arguments = arguments.substring(0, arguments.length()-1);
-                    IntegrationNode n = null;
-                    switch (nodeCommand){
-                        case "from":
-                        case "wireTap":
-                        case "bean":
-                        case "aggregate":
-                        case "split":
-                        case "process":
-                        case "filter":
-                        case "convertBodyTo":
-                        case "setHeader":
-                        case "setProperty":
-                        case "enrich":
-                            n = new IntegrationNode(
-                                    Utils.matchCommand(nodeCommand) + " -> " + arguments.trim(),
-                                    new ArrayList<>(),
-                                    new ArrayList<>()
-                            );
-                            A.insertNode(n);
-                            if(choiceCount > 0) { // IF I AM IN A CHOICE
-                                if(endFlag){ //IF I AM THE FIRST NODE AFTER AN END COMMAND
-                                    for (int leaf : choiceQueue.getFirst().leaves)
-                                        A.insertChannel(new Channel(
-                                                leaf, n.getId()
-                                        ));
-                                    choiceQueue.pop();
-                                    endFlag=false;
-                                    choiceCount--;
-                                    if (choiceCount > 0){
-                                        choiceQueue.getFirst().lastID = n.getId();
-                                    }
-                                } else {
-                                    if (startChoice) {
-                                        A.insertChannel(new Channel(
-                                                choiceQueue.getFirst().lastChoiceID,
-                                                n.getId()
-                                        ));
-                                        startChoice = false;
-                                    }else{
-                                        A.insertChannel(new Channel(
-                                                choiceQueue.getFirst().lastID,
-                                                n.getId()
-                                        ));
-                                    }
-                                    choiceQueue.getFirst().lastID = n.getId();
-                                }
-                            }else if (previousNode >= 0){ // IF I AM IN A STANDARD ROUTE
-                                A.insertChannel(new Channel(
-                                        previousNode,
-                                        n.getId()
-                                ));
-                            }
-                            previousNode = n.getId();
-                            break;
-                        case "to": //SEND TO ENDPOINT
-                            String[] argument = arguments.split(",");
-                            for (String s : argument){
-                                n = new IntegrationNode(
-                                        NODE_TYPE.ENDPOINT + " -> " + s.trim(),
-                                        new ArrayList<>(),
-                                        new ArrayList<>());
-                                A.insertNode(n);
-                                n = A.getNodes().get(A.getNodes().size()-1);
+        for (Node route : routes) {
+            List<String> commands = getCommands(route);
 
+            for (String s : commands) System.out.println(s);
+            System.out.println("---------------------------------------------------------------------");
+
+            LinkedList<ChoiceStruct> choiceQueue = new LinkedList<>();
+            int choiceCount = 0;
+            boolean endFlag = false;
+            int previousNode = -1;
+            boolean startChoice = false;
+            for (int i = commands.size() - 1; i >= 0; i--) {
+                for (String nodeCommand : Utils.NodeCommands)
+                    if (commands.get(i).startsWith(nodeCommand)) {
+                        String arguments = commands.get(i).substring(nodeCommand.length() + 1);
+                        arguments = arguments.substring(0, arguments.length() - 1);
+                        IntegrationNode n = null;
+                        switch (nodeCommand) {
+                            case "from":
+                            case "wireTap":
+                            case "bean":
+                            case "aggregate":
+                            case "split":
+                            case "process":
+                            case "filter":
+                            case "convertBodyTo":
+                            case "setHeader":
+                            case "setProperty":
+                            case "enrich":
+                                n = new IntegrationNode(
+                                        Utils.matchCommand(nodeCommand) + " -> " + arguments.trim(),
+                                        new ArrayList<>(),
+                                        new ArrayList<>()
+                                );
+                                A.insertNode(n);
                                 if (choiceCount > 0) { // IF I AM IN A CHOICE
                                     if (endFlag) { //IF I AM THE FIRST NODE AFTER AN END COMMAND
                                         for (int leaf : choiceQueue.getFirst().leaves)
@@ -160,8 +120,7 @@ public class Route {
                                         endFlag = false;
                                         choiceCount--;
                                         if (choiceCount > 0) {
-                                            choiceQueue.getFirst().lastID = -1;
-                                            startChoice = true;
+                                            choiceQueue.getFirst().lastID = n.getId();
                                         }
                                     } else {
                                         if (startChoice) {
@@ -169,95 +128,131 @@ public class Route {
                                                     choiceQueue.getFirst().lastChoiceID,
                                                     n.getId()
                                             ));
-                                        }else{
+                                            startChoice = false;
+                                        } else {
                                             A.insertChannel(new Channel(
                                                     choiceQueue.getFirst().lastID,
                                                     n.getId()
                                             ));
                                         }
-                                        choiceQueue.getFirst().lastID = -1;
-                                        startChoice = true;
+                                        choiceQueue.getFirst().lastID = n.getId();
                                     }
-                                } else if(previousNode >= 0){ // IF I AM IN A STANDARD ROUTE
+                                } else if (previousNode >= 0) { // IF I AM IN A STANDARD ROUTE
                                     A.insertChannel(new Channel(
                                             previousNode,
                                             n.getId()
                                     ));
                                 }
                                 previousNode = n.getId();
-                            }
-                            break;
-                        case "choice": //BRANCH THE ROUTE AMONG MULTIPLE SUB-ROUTES
-                            n = new IntegrationNode(
-                                    Utils.matchCommand(nodeCommand),
-                                    new ArrayList<>(),
-                                    new ArrayList<>()
-                            );
-                            A.insertNode(n);
-                            if(choiceCount > 0) { // IF I AM IN A CHOICE
-                                if(endFlag){ //IF I AM THE FIRST NODE AFTER AN END COMMAND
-                                    for (int leaf : choiceQueue.getFirst().leaves)
+                                break;
+                            case "to": //SEND TO ENDPOINT
+                                String[] argument = arguments.split(",");
+                                for (String s : argument) {
+                                    n = new IntegrationNode(
+                                            NODE_TYPE.ENDPOINT + " -> " + s.trim(),
+                                            new ArrayList<>(),
+                                            new ArrayList<>());
+                                    A.insertNode(n);
+                                    n = A.getNodes().get(A.getNodes().size() - 1);
+
+                                    if (choiceCount > 0) { // IF I AM IN A CHOICE
+                                        if (endFlag) { //IF I AM THE FIRST NODE AFTER AN END COMMAND
+                                            for (int leaf : choiceQueue.getFirst().leaves)
+                                                A.insertChannel(new Channel(
+                                                        leaf, n.getId()
+                                                ));
+                                            choiceQueue.pop();
+                                            endFlag = false;
+                                            choiceCount--;
+                                            if (choiceCount > 0) {
+                                                choiceQueue.getFirst().lastID = -1;
+                                                startChoice = true;
+                                            }
+                                        } else {
+                                            if (startChoice) {
+                                                A.insertChannel(new Channel(
+                                                        choiceQueue.getFirst().lastChoiceID,
+                                                        n.getId()
+                                                ));
+                                            } else {
+                                                A.insertChannel(new Channel(
+                                                        choiceQueue.getFirst().lastID,
+                                                        n.getId()
+                                                ));
+                                            }
+                                            choiceQueue.getFirst().lastID = -1;
+                                            startChoice = true;
+                                        }
+                                    } else if (previousNode >= 0) { // IF I AM IN A STANDARD ROUTE
                                         A.insertChannel(new Channel(
-                                                leaf, n.getId()
+                                                previousNode,
+                                                n.getId()
                                         ));
-                                    choiceQueue.pop();
-                                    endFlag=false;
-                                    choiceCount--;
-                                    if (choiceCount > 0){
+                                    }
+                                    previousNode = n.getId();
+                                }
+                                break;
+                            case "choice": //BRANCH THE ROUTE AMONG MULTIPLE SUB-ROUTES
+                                n = new IntegrationNode(
+                                        Utils.matchCommand(nodeCommand),
+                                        new ArrayList<>(),
+                                        new ArrayList<>()
+                                );
+                                A.insertNode(n);
+                                if (choiceCount > 0) { // IF I AM IN A CHOICE
+                                    if (endFlag) { //IF I AM THE FIRST NODE AFTER AN END COMMAND
+                                        for (int leaf : choiceQueue.getFirst().leaves)
+                                            A.insertChannel(new Channel(
+                                                    leaf, n.getId()
+                                            ));
+                                        choiceQueue.pop();
+                                        endFlag = false;
+                                        choiceCount--;
+                                        if (choiceCount > 0) {
+                                            choiceQueue.getFirst().lastID = n.getId();
+                                        }
+                                    } else { // I AM A STANDARD NODE IN A CHOICE
+                                        if (startChoice) {
+                                            A.insertChannel(new Channel(
+                                                    choiceQueue.getFirst().lastChoiceID,
+                                                    n.getId()
+                                            ));
+                                        } else {
+                                            A.insertChannel(new Channel(
+                                                    choiceQueue.getFirst().lastID,
+                                                    n.getId()
+                                            ));
+                                        }
                                         choiceQueue.getFirst().lastID = n.getId();
                                     }
-                                } else { // I AM A STANDARD NODE IN A CHOICE
-                                    if (startChoice) {
-                                        A.insertChannel(new Channel(
-                                                choiceQueue.getFirst().lastChoiceID,
-                                                n.getId()
-                                        ));
-                                    }else{
-                                        A.insertChannel(new Channel(
-                                                choiceQueue.getFirst().lastID,
-                                                n.getId()
-                                        ));
-                                    }
-                                    choiceQueue.getFirst().lastID = n.getId();
+                                } else if (previousNode >= 0) { // IF I AM IN A STANDARD ROUTE
+                                    A.insertChannel(new Channel(
+                                            previousNode,
+                                            n.getId()
+                                    ));
                                 }
-                            }else if (previousNode >= 0){ // IF I AM IN A STANDARD ROUTE
-                                A.insertChannel(new Channel(
-                                        previousNode,
-                                        n.getId()
-                                ));
-                            }
-                            previousNode = n.getId();
-                            //CODE FOR CHANNELS
-                            choiceCount++;
-                            choiceQueue.push(new ChoiceStruct(n.getId()));
-                            startChoice = true;
-                            break;
-                        case "endChoice": //END CHOICE BRANCH
-                            if (choiceQueue.getFirst().lastID > 0)
-                                choiceQueue.getFirst().leaves.add(choiceQueue.getFirst().lastID);
-                            startChoice = true;
-                            break;
-                        case "end": // END ALL CHOICE BRANCHES AND COME BACK TO MAIN ROUTE
-                            endFlag = true;
-                            startChoice = false;
-                            break;
-                        default:
-                            break;
+                                previousNode = n.getId();
+                                //CODE FOR CHANNELS
+                                choiceCount++;
+                                choiceQueue.push(new ChoiceStruct(n.getId()));
+                                startChoice = true;
+                                break;
+                            case "endChoice": //END CHOICE BRANCH
+                                if (choiceQueue.getFirst().lastID > 0)
+                                    choiceQueue.getFirst().leaves.add(choiceQueue.getFirst().lastID);
+                                startChoice = true;
+                                break;
+                            case "end": // END ALL CHOICE BRANCHES AND COME BACK TO MAIN ROUTE
+                                endFlag = true;
+                                startChoice = false;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
                     }
-                    break;
-                }
+            }
         }
-    }
-
-    private static List<String> getCommands(List<Node> routes){
-        List<String> commands = new ArrayList<>();
-        for (Node n : routes){
-            commands = Stream.concat(
-                    commands.stream(),
-                    getCommands(n).stream()
-            ).collect(Collectors.toList());
-        }
-        return commands;
     }
 
     private static List<String> getCommands(Node route){

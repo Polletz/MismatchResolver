@@ -19,5 +19,10 @@ public class RouteExample extends RouteBuilder {
                     .process("c").endChoice()
             .end()
             .to("d");
+
+        from("COOK_SOMETHING")
+                .routeId(URIEnchanter.enchantURI(COOK_SOMETHING))
+                .log(LoggingLevel.INFO, DemoIntegrationRoute.class.getName(), "${body}")
+                .to(THINK_ABOUT_IF_YOU_HAVE_MISSED_SOMETHING);
     }
 }
