@@ -9,7 +9,6 @@ import com.rpaoletti.mismatchresolver.model.Channel;
 import com.rpaoletti.mismatchresolver.model.IntegrationNode;
 import com.rpaoletti.mismatchresolver.service.IntegrationService;
 import com.rpaoletti.mismatchresolver.utils.NODE_TYPE;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,12 +16,11 @@ import java.util.stream.Stream;
 
 public class RouteParser {
 
-    private final String rawRoute;
+    private String rawRoute;
 
     IntegrationService A;
 
-    @Autowired
-    public RouteParser(@JsonProperty("rawRoute") String rawRoute){
+    public RouteParser(@JsonProperty("route") String rawRoute){
         this.rawRoute = rawRoute;
         A = new IntegrationService();
     }
@@ -44,9 +42,6 @@ public class RouteParser {
             List<IntegrationNode> newNodes = null;
             List<Channel> newChannels = null;
             if(routes.isPresent()) getNewNodesAndChannels(routes.get());
-
-            printNodes();
-            printChannels();
         }else{
             System.out.println("Insert a valid Java File");
         }
@@ -84,9 +79,6 @@ public class RouteParser {
     private void getNewNodesAndChannels(List<Node> routes){
         for (Node route : routes) {
             List<String> commands = getCommands(route);
-
-            for (String s : commands) System.out.println(s);
-            System.out.println("---------------------------------------------------------------------");
 
             LinkedList<ChoiceStruct> choiceQueue = new LinkedList<>();
             int choiceCount = 0;

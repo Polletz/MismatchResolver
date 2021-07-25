@@ -13,11 +13,15 @@ public class RouteParserService {
     public RouteParserService() {
     }
 
-    public void addRoute(String route){
-        routeParser = new RouteParser(route);
+    public void addRouteParser(RouteParser parser){
+        this.routeParser = parser;
     }
 
     public String getRoute(){
         return routeParser.getRoute();
+    }
+
+    public void parseRoute(){
+        routeParser.parseRoute();
     }
 }

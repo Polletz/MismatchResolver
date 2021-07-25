@@ -1,5 +1,6 @@
 package com.rpaoletti.routeparser.api;
 
+import com.rpaoletti.routeparser.RouteParser;
 import com.rpaoletti.routeparser.service.RouteParserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,9 @@ public class RouteParserController {
     }
 
     @PostMapping(path = "route")
-    public void addRoute(@RequestBody String rawRoute){
-        routeParserService.addRoute(rawRoute);
+    public void addRoute(@RequestBody RouteParser parser){
+        routeParserService.addRouteParser(parser);
+        routeParserService.parseRoute();
     }
 
     @GetMapping(path = "route")
