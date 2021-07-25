@@ -1,7 +1,7 @@
 package com.rpaoletti.mismatchresolver.api;
 
-import com.rpaoletti.mismatchresolver.architecture.Channel;
-import com.rpaoletti.mismatchresolver.architecture.IntegrationNode;
+import com.rpaoletti.mismatchresolver.model.Channel;
+import com.rpaoletti.mismatchresolver.model.IntegrationNode;
 import com.rpaoletti.mismatchresolver.service.IntegrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,6 @@ import java.util.List;
 public class IntegrationController {
 
     private final IntegrationService intService;
-    private String route;
 
     @Autowired
     public IntegrationController(IntegrationService intService) {
@@ -38,11 +37,5 @@ public class IntegrationController {
     @PostMapping(path = "addChannel")
     public void insertChannel(@RequestBody Channel c){
         this.intService.addChannel(c);
-    }
-
-    @PostMapping(path = "insertRoute")
-    public void insertRoute(@RequestBody String route){
-        this.route = route;
-        System.out.println("new route : " + this.route);
     }
 }

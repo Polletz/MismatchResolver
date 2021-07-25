@@ -1,4 +1,4 @@
-package com.rpaoletti.mismatchresolver.architecture;
+package com.rpaoletti.mismatchresolver.model;
 
 import com.rpaoletti.mismatchresolver.utils.IDGenerator;
 import com.rpaoletti.mismatchresolver.utils.Utils;

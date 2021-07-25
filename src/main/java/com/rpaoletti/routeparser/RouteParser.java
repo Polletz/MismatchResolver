@@ -1,27 +1,34 @@
 package com.rpaoletti.routeparser;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.rpaoletti.mismatchresolver.architecture.Channel;
-import com.rpaoletti.mismatchresolver.architecture.IntegrationArchitecture;
-import com.rpaoletti.mismatchresolver.architecture.IntegrationNode;
+import com.rpaoletti.mismatchresolver.model.Channel;
+import com.rpaoletti.mismatchresolver.model.IntegrationNode;
+import com.rpaoletti.mismatchresolver.service.IntegrationService;
 import com.rpaoletti.mismatchresolver.utils.NODE_TYPE;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Route {
+public class RouteParser {
 
     private final String rawRoute;
 
-    IntegrationArchitecture A;
+    IntegrationService A;
 
-    public Route(String rawRoute){
+    @Autowired
+    public RouteParser(@JsonProperty("rawRoute") String rawRoute){
         this.rawRoute = rawRoute;
-        A = new IntegrationArchitecture();
+        A = new IntegrationService();
+    }
+
+    public String getRoute(){
+        return rawRoute;
     }
 
     public void parseRoute(){
@@ -109,11 +116,11 @@ public class Route {
                                         new ArrayList<>(),
                                         new ArrayList<>()
                                 );
-                                A.insertNode(n);
+                                A.addNode(n);
                                 if (choiceCount > 0) { // IF I AM IN A CHOICE
                                     if (endFlag) { //IF I AM THE FIRST NODE AFTER AN END COMMAND
                                         for (int leaf : choiceQueue.getFirst().leaves)
-                                            A.insertChannel(new Channel(
+                                            A.addChannel(new Channel(
                                                     leaf, n.getId()
                                             ));
                                         choiceQueue.pop();
@@ -124,13 +131,13 @@ public class Route {
                                         }
                                     } else {
                                         if (startChoice) {
-                                            A.insertChannel(new Channel(
+                                            A.addChannel(new Channel(
                                                     choiceQueue.getFirst().lastChoiceID,
                                                     n.getId()
                                             ));
                                             startChoice = false;
                                         } else {
-                                            A.insertChannel(new Channel(
+                                            A.addChannel(new Channel(
                                                     choiceQueue.getFirst().lastID,
                                                     n.getId()
                                             ));
@@ -138,7 +145,7 @@ public class Route {
                                         choiceQueue.getFirst().lastID = n.getId();
                                     }
                                 } else if (previousNode >= 0) { // IF I AM IN A STANDARD ROUTE
-                                    A.insertChannel(new Channel(
+                                    A.addChannel(new Channel(
                                             previousNode,
                                             n.getId()
                                     ));
@@ -152,13 +159,13 @@ public class Route {
                                             NODE_TYPE.ENDPOINT + " -> " + s.trim(),
                                             new ArrayList<>(),
                                             new ArrayList<>());
-                                    A.insertNode(n);
+                                    A.addNode(n);
                                     n = A.getNodes().get(A.getNodes().size() - 1);
 
                                     if (choiceCount > 0) { // IF I AM IN A CHOICE
                                         if (endFlag) { //IF I AM THE FIRST NODE AFTER AN END COMMAND
                                             for (int leaf : choiceQueue.getFirst().leaves)
-                                                A.insertChannel(new Channel(
+                                                A.addChannel(new Channel(
                                                         leaf, n.getId()
                                                 ));
                                             choiceQueue.pop();
@@ -170,12 +177,12 @@ public class Route {
                                             }
                                         } else {
                                             if (startChoice) {
-                                                A.insertChannel(new Channel(
+                                                A.addChannel(new Channel(
                                                         choiceQueue.getFirst().lastChoiceID,
                                                         n.getId()
                                                 ));
                                             } else {
-                                                A.insertChannel(new Channel(
+                                                A.addChannel(new Channel(
                                                         choiceQueue.getFirst().lastID,
                                                         n.getId()
                                                 ));
@@ -184,7 +191,7 @@ public class Route {
                                             startChoice = true;
                                         }
                                     } else if (previousNode >= 0) { // IF I AM IN A STANDARD ROUTE
-                                        A.insertChannel(new Channel(
+                                        A.addChannel(new Channel(
                                                 previousNode,
                                                 n.getId()
                                         ));
@@ -198,11 +205,11 @@ public class Route {
                                         new ArrayList<>(),
                                         new ArrayList<>()
                                 );
-                                A.insertNode(n);
+                                A.addNode(n);
                                 if (choiceCount > 0) { // IF I AM IN A CHOICE
                                     if (endFlag) { //IF I AM THE FIRST NODE AFTER AN END COMMAND
                                         for (int leaf : choiceQueue.getFirst().leaves)
-                                            A.insertChannel(new Channel(
+                                            A.addChannel(new Channel(
                                                     leaf, n.getId()
                                             ));
                                         choiceQueue.pop();
@@ -213,12 +220,12 @@ public class Route {
                                         }
                                     } else { // I AM A STANDARD NODE IN A CHOICE
                                         if (startChoice) {
-                                            A.insertChannel(new Channel(
+                                            A.addChannel(new Channel(
                                                     choiceQueue.getFirst().lastChoiceID,
                                                     n.getId()
                                             ));
                                         } else {
-                                            A.insertChannel(new Channel(
+                                            A.addChannel(new Channel(
                                                     choiceQueue.getFirst().lastID,
                                                     n.getId()
                                             ));
@@ -226,7 +233,7 @@ public class Route {
                                         choiceQueue.getFirst().lastID = n.getId();
                                     }
                                 } else if (previousNode >= 0) { // IF I AM IN A STANDARD ROUTE
-                                    A.insertChannel(new Channel(
+                                    A.addChannel(new Channel(
                                             previousNode,
                                             n.getId()
                                     ));

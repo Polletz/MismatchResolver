@@ -1,4 +1,4 @@
-package com.rpaoletti.mismatchresolver.architecture;
+package com.rpaoletti.mismatchresolver.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

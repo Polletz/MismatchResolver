@@ -1,8 +1,8 @@
 package com.rpaoletti.mismatchresolver.utils;
 
-import com.rpaoletti.mismatchresolver.architecture.CompositeNamedType;
-import com.rpaoletti.mismatchresolver.architecture.NamedType;
-import com.rpaoletti.mismatchresolver.architecture.SimpleNamedType;
+import com.rpaoletti.mismatchresolver.model.CompositeNamedType;
+import com.rpaoletti.mismatchresolver.model.NamedType;
+import com.rpaoletti.mismatchresolver.model.SimpleNamedType;
 
 import java.util.*;
 

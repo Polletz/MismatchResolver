@@ -1,20 +1,12 @@
-package com.rpaoletti.mismatchresolver;
+package com.rpaoletti;
 
-import com.rpaoletti.routeparser.Route;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 @SpringBootApplication
 public class MismatchResolverApplication {
 
     public static void main(String[] args) {
-
 /*
         CompositeNamedType ct1 = new CompositeNamedType("book", List.of(
                 new SimpleNamedType("title", "string"),
@@ -89,15 +81,19 @@ public class MismatchResolverApplication {
 
         for (SimpleNamedType s : Utils.leaves(ct1))
             System.out.println(s.getName() + ", " + s.getXMLType());
-*/
+
         try {
             String route = new String(Files.readAllBytes(Paths.get("src\\main\\java\\com\\rpaoletti\\examples\\RouteExample.java")), StandardCharsets.UTF_8);
-            Route r = new Route(route);
+            RouteParser r = new RouteParser(route);
             r.parseRoute();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        //SpringApplication.run(MismatchResolverApplication.class, args);
+*/
+        try {
+            SpringApplication.run(MismatchResolverApplication.class, args);
+        }catch (Exception e){
+            System.out.println(e.getStackTrace());
+        }
     }
 }

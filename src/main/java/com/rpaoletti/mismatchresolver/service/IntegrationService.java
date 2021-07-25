@@ -1,8 +1,9 @@
 package com.rpaoletti.mismatchresolver.service;
 
-import com.rpaoletti.mismatchresolver.architecture.Channel;
-import com.rpaoletti.mismatchresolver.architecture.IntegrationArchitecture;
-import com.rpaoletti.mismatchresolver.architecture.IntegrationNode;
+import com.rpaoletti.mismatchresolver.model.Channel;
+import com.rpaoletti.mismatchresolver.model.IntegrationArchitecture;
+import com.rpaoletti.mismatchresolver.model.IntegrationNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class IntegrationService {
 
     private final IntegrationArchitecture architecture;
 
+    @Autowired
     public IntegrationService() {
         this.architecture = new IntegrationArchitecture();
     }

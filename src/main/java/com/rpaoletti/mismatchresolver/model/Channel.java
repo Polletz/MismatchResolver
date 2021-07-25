@@ -1,14 +1,12 @@
-package com.rpaoletti.mismatchresolver.architecture;
+package com.rpaoletti.mismatchresolver.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Channel {
 
     private final int source;
-    //@JsonProperty
     private NamedType sourceType;
     private final int dest;
-    //@JsonProperty
     private NamedType destType;
 
     public Channel(
