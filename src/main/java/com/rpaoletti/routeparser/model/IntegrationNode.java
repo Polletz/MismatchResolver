@@ -1,4 +1,4 @@
-package com.rpaoletti.mismatchresolver.model;
+package com.rpaoletti.routeparser.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

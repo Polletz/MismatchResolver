@@ -1,7 +1,7 @@
-package com.rpaoletti.mismatchresolver.model;
+package com.rpaoletti.routeparser.model;
 
-import com.rpaoletti.mismatchresolver.utils.IDGenerator;
-import com.rpaoletti.mismatchresolver.utils.Utils;
+import com.rpaoletti.routeparser.utils.IDGenerator;
+import com.rpaoletti.routeparser.utils.Utils;
 
 import java.util.*;
 

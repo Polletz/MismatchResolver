@@ -1,4 +1,4 @@
-package com.rpaoletti.mismatchresolver.utils;
+package com.rpaoletti.routeparser.utils;
 
 public class IDGenerator {
     int uniqueId;
