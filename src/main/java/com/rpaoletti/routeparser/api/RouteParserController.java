@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping(path = "api")
 public class RouteParserController {
+
+    //TODO creare api che restituisce nodi e canali creati dalla route in input
 
     private final RouteParserService routeParserService;
 
@@ -49,6 +52,11 @@ public class RouteParserController {
     @PostMapping(path = "integration/addChannel")
     public void insertChannel(@RequestBody Channel c){
         this.routeParserService.addChannel(c);
+    }
+
+    @GetMapping(path = "parser/integration")
+    public String getIntegration(){
+        return routeParserService.getIntegration();
     }
 
 }

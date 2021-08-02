@@ -44,4 +44,8 @@ public class RouteParserService {
     public void addChannel(Channel c){
         this.routeParser.A.insertChannel(c);
     }
+
+    public String getIntegration(){
+        return routeParser.getJSON();
+    }
 }

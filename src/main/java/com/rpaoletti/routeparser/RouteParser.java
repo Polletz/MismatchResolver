@@ -5,6 +5,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.google.gson.Gson;
 import com.rpaoletti.routeparser.model.Channel;
 import com.rpaoletti.routeparser.model.IntegrationArchitecture;
 import com.rpaoletti.routeparser.model.IntegrationNode;
@@ -285,6 +286,12 @@ public class RouteParser {
                 commands.stream(),
                 getCommands(c).stream()).collect(Collectors.toList());
         return commands;
+    }
+
+    public String getJSON(){
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(A);
+        return jsonStr;
     }
 
     private void printNodes(){
