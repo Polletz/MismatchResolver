@@ -116,7 +116,7 @@ public class RouteParser {
                                     if (endFlag) { //IF I AM THE FIRST NODE AFTER AN END COMMAND
                                         for (int leaf : choiceQueue.getFirst().leaves)
                                             A.insertChannel(new Channel(
-                                                    leaf, n.getId()
+                                                    leaf, null,  n.getId(), null
                                             ));
                                         choiceQueue.pop();
                                         endFlag = false;
@@ -128,13 +128,17 @@ public class RouteParser {
                                         if (startChoice) {
                                             A.insertChannel(new Channel(
                                                     choiceQueue.getFirst().lastChoiceID,
-                                                    n.getId()
+                                                    null,
+                                                    n.getId(),
+                                                    null
                                             ));
                                             startChoice = false;
                                         } else {
                                             A.insertChannel(new Channel(
                                                     choiceQueue.getFirst().lastID,
-                                                    n.getId()
+                                                    null,
+                                                    n.getId(),
+                                                    null
                                             ));
                                         }
                                         choiceQueue.getFirst().lastID = n.getId();
@@ -142,7 +146,9 @@ public class RouteParser {
                                 } else if (previousNode >= 0) { // IF I AM IN A STANDARD ROUTE
                                     A.insertChannel(new Channel(
                                             previousNode,
-                                            n.getId()
+                                            null,
+                                            n.getId(),
+                                            null
                                     ));
                                 }
                                 previousNode = n.getId();
@@ -161,7 +167,7 @@ public class RouteParser {
                                         if (endFlag) { //IF I AM THE FIRST NODE AFTER AN END COMMAND
                                             for (int leaf : choiceQueue.getFirst().leaves)
                                                 A.insertChannel(new Channel(
-                                                        leaf, n.getId()
+                                                        leaf, null, n.getId(), null
                                                 ));
                                             choiceQueue.pop();
                                             endFlag = false;
@@ -174,12 +180,16 @@ public class RouteParser {
                                             if (startChoice) {
                                                 A.insertChannel(new Channel(
                                                         choiceQueue.getFirst().lastChoiceID,
-                                                        n.getId()
+                                                        null,
+                                                        n.getId(),
+                                                        null
                                                 ));
                                             } else {
                                                 A.insertChannel(new Channel(
                                                         choiceQueue.getFirst().lastID,
-                                                        n.getId()
+                                                        null,
+                                                        n.getId(),
+                                                        null
                                                 ));
                                             }
                                             choiceQueue.getFirst().lastID = -1;
@@ -188,7 +198,9 @@ public class RouteParser {
                                     } else if (previousNode >= 0) { // IF I AM IN A STANDARD ROUTE
                                         A.insertChannel(new Channel(
                                                 previousNode,
-                                                n.getId()
+                                                null,
+                                                n.getId(),
+                                                null
                                         ));
                                     }
                                     previousNode = n.getId();
@@ -205,7 +217,7 @@ public class RouteParser {
                                     if (endFlag) { //IF I AM THE FIRST NODE AFTER AN END COMMAND
                                         for (int leaf : choiceQueue.getFirst().leaves)
                                             A.insertChannel(new Channel(
-                                                    leaf, n.getId()
+                                                    leaf, null, n.getId(), null
                                             ));
                                         choiceQueue.pop();
                                         endFlag = false;
@@ -217,12 +229,16 @@ public class RouteParser {
                                         if (startChoice) {
                                             A.insertChannel(new Channel(
                                                     choiceQueue.getFirst().lastChoiceID,
-                                                    n.getId()
+                                                    null,
+                                                    n.getId(),
+                                                    null
                                             ));
                                         } else {
                                             A.insertChannel(new Channel(
                                                     choiceQueue.getFirst().lastID,
-                                                    n.getId()
+                                                    null,
+                                                    n.getId(),
+                                                    null
                                             ));
                                         }
                                         choiceQueue.getFirst().lastID = n.getId();
@@ -230,7 +246,9 @@ public class RouteParser {
                                 } else if (previousNode >= 0) { // IF I AM IN A STANDARD ROUTE
                                     A.insertChannel(new Channel(
                                             previousNode,
-                                            n.getId()
+                                            null,
+                                            n.getId(),
+                                            null
                                     ));
                                 }
                                 previousNode = n.getId();

@@ -6,11 +6,22 @@ import java.util.List;
 
 public class IntegrationNode {
 
-    @JsonProperty
     private int id;
     private String sort;
     private List<NamedType> inputs;
     private List<NamedType> outputs;
+
+    public IntegrationNode(
+            @JsonProperty int id,
+            @JsonProperty String sort,
+            @JsonProperty List<NamedType> inputs,
+            @JsonProperty List<NamedType> outputs
+    ) {
+        this.id = id;
+        this.sort = sort;
+        this.inputs = inputs;
+        this.outputs = outputs;
+    }
 
     public IntegrationNode(
             @JsonProperty String sort,

@@ -1,5 +1,6 @@
 package com.rpaoletti.routeparser.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rpaoletti.routeparser.utils.IDGenerator;
 import com.rpaoletti.routeparser.utils.Utils;
 
@@ -7,8 +8,8 @@ import java.util.*;
 
 public class IntegrationArchitecture {
 
-    private List<IntegrationNode> nodes;
-    private List<Channel> channels;
+    private @JsonProperty List<IntegrationNode> nodes;
+    private @JsonProperty List<Channel> channels;
 
     private IDGenerator idGenerator;
 
@@ -35,7 +36,11 @@ public class IntegrationArchitecture {
         return channels;
     }
 
-    public void adaptToSimple(Channel c, NamedType ts){
+    public void setChannels(List<Channel> channels){
+        this.channels = channels;
+    }
+
+    private void adaptToSimple(Channel c, NamedType ts){
         List<IntegrationNode> newNodes = new ArrayList<>();
         List<Channel> newChannels = new ArrayList<>();
 
@@ -92,7 +97,7 @@ public class IntegrationArchitecture {
         channels = Utils.union(channels, newChannels);
     }
 
-    public void adaptToComposite(Channel c, Map<SimpleNamedType, SimpleNamedType> chosenSimilarSet){
+    private void adaptToComposite(Channel c, Map<SimpleNamedType, SimpleNamedType> chosenSimilarSet){
         List<IntegrationNode> newNodes = new ArrayList<>();
         List<Channel> newChannels = new ArrayList<>();
 
@@ -167,7 +172,6 @@ public class IntegrationArchitecture {
         return "IntegrationArchitecture{" +
                 "nodes=" + nodes +
                 ", channels=" + channels +
-                ", idGenerator=" + idGenerator +
                 '}';
     }
 }

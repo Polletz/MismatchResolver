@@ -2,6 +2,7 @@ package com.rpaoletti.routeparser.service;
 
 import com.rpaoletti.routeparser.RouteParser;
 import com.rpaoletti.routeparser.model.Channel;
+import com.rpaoletti.routeparser.model.IntegrationArchitecture;
 import com.rpaoletti.routeparser.model.IntegrationNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,15 @@ public class RouteParserService {
 
     public String getIntegration(){
         return routeParser.getJSON();
+    }
+
+    public void setArchitecture(IntegrationArchitecture architecture){
+        System.out.println("Received Architecture : " + architecture);
+        this.routeParser.A = architecture;
+    }
+
+    public IntegrationArchitecture getFixedArchitecture(){
+        this.routeParser.A.mismatchResolver();
+        return this.routeParser.A;
     }
 }

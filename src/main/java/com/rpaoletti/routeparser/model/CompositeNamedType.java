@@ -17,12 +17,6 @@ public class CompositeNamedType implements NamedType {
         this.typeSet = typeSet;
     }
 
-    public CompositeNamedType(
-            @JsonProperty String name
-    ) {
-        this.name = name;
-    }
-
     public List<NamedType> getTypeSet() {
         return typeSet;
     }

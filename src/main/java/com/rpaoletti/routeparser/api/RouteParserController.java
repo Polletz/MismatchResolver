@@ -2,6 +2,7 @@ package com.rpaoletti.routeparser.api;
 
 import com.rpaoletti.routeparser.RouteParser;
 import com.rpaoletti.routeparser.model.Channel;
+import com.rpaoletti.routeparser.model.IntegrationArchitecture;
 import com.rpaoletti.routeparser.model.IntegrationNode;
 import com.rpaoletti.routeparser.service.RouteParserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api")
 public class RouteParserController {
-
-    //TODO creare api che restituisce nodi e canali creati dalla route in input
 
     private final RouteParserService routeParserService;
 
@@ -59,4 +58,13 @@ public class RouteParserController {
         return routeParserService.getIntegration();
     }
 
+    @PostMapping(path = "integration")
+    public void setArchitecture(@RequestBody IntegrationArchitecture architecture){
+        this.routeParserService.setArchitecture(architecture);
+    }
+
+    @GetMapping(path = "integration/fixed")
+    public IntegrationArchitecture getFixedArchitecture(){
+        return this.routeParserService.getFixedArchitecture();
+    }
 }

@@ -93,7 +93,7 @@ public class MismatchResolverApplication {
         try {
             SpringApplication.run(MismatchResolverApplication.class, args);
         }catch (Exception e){
-            System.out.println(e.getStackTrace());
+            System.out.println(e.getMessage());
         }
     }
 }

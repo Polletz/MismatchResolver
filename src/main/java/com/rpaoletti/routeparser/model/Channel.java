@@ -21,14 +21,6 @@ public class Channel {
         this.destType = destType;
     }
 
-    public Channel(
-            @JsonProperty int source,
-            @JsonProperty int dest
-     ) {
-        this.source = source;
-        this.dest = dest;
-    }
-
     public int getSource() {
         return source;
     }
