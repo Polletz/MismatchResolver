@@ -1,19 +1,22 @@
 package com.rpaoletti.routeparser.utils;
 
-import com.rpaoletti.routeparser.model.CompositeNamedType;
 import com.rpaoletti.routeparser.model.NamedType;
-import com.rpaoletti.routeparser.model.SimpleNamedType;
 
 import java.util.*;
 
 public class Utils {
 
-    public static boolean isCastable(SimpleNamedType t1, SimpleNamedType t2){
-        return t1.getName().equals(t2.getName());
+    public static boolean isCastable(NamedType t1, NamedType t2){
+        if(t1.isSimple() && t2.isSimple())
+            return t1.getName().equals(t2.getName());
+        else
+            return false;
     }
 
-    public static boolean isSemanticallySimilar(SimpleNamedType t1, SimpleNamedType t2){
-        return t1.getXMLType().equals(t2.getXMLType());
+    public static boolean isSemanticallySimilar(NamedType t1, NamedType t2){
+        if(t1.isSimple() && t2.isSimple())
+            return t1.getXMLType().equals(t2.getXMLType());
+        else return false;
     }
 
     public static <T> List<T> union(List<T> list1, List<T> list2) {
@@ -25,49 +28,50 @@ public class Utils {
         return new ArrayList<>(set);
     }
 
-    public static List<SimpleNamedType> leaves(CompositeNamedType t){
-        List<SimpleNamedType> leaves = new ArrayList<>();
+    public static List<NamedType> leaves(NamedType t){
+        List<NamedType> leaves = new ArrayList<>();
         for(NamedType u : t.getTypeSet()){
-            if(u.isSimple()) leaves.add((SimpleNamedType) u);
-            else leaves = union(leaves, leaves((CompositeNamedType) u));
+            if(u.isSimple()) leaves.add(u);
+            else leaves = union(leaves, leaves(u));
         }
         return leaves;
     }
 
-    public static List<SimpleNamedType> similarSet(SimpleNamedType t1, NamedType t2){
-        List<SimpleNamedType> set = new ArrayList<>();
-
-        if(t2.isSimple()){
-            if(Utils.isSemanticallySimilar(t1,(SimpleNamedType) t2) && Utils.isCastable(t1,(SimpleNamedType) t2)){
-                set.add((SimpleNamedType) t2);
+    public static List<NamedType> similarSet(NamedType t1, NamedType t2){
+        List<NamedType> set = new ArrayList<>();
+        if(t1.isSimple())
+            if(t2.isSimple()){
+                if(Utils.isSemanticallySimilar(t1, t2) && Utils.isCastable(t1, t2)){
+                    set.add(t2);
+                }
+                return set;
+            }else{
+                for (NamedType t : t2.getTypeSet()){
+                    set = Utils.union(set, similarSet(t1, t));
+                }
             }
-            return set;
-        }else{
-            for (NamedType t : ((CompositeNamedType) t2).getTypeSet()){
-                set = Utils.union(set, similarSet(t1, t));
-            }
-        }
         return set;
     }
 
-    public static Map<SimpleNamedType, List<SimpleNamedType>> similarSets(NamedType t1, CompositeNamedType t2){
-        Map<SimpleNamedType, List<SimpleNamedType>> simSets = new HashMap<>();
-        if(t1.isSimple()){
-            simSets.put((SimpleNamedType) t1, similarSet((SimpleNamedType) t1, t2));
-        }else{
-            for (NamedType t : ((CompositeNamedType) t1).getTypeSet()){
-                simSets.putAll(similarSets(t, t2));
+    public static Map<NamedType, List<NamedType>> similarSets(NamedType t1, NamedType t2){
+        Map<NamedType, List<NamedType>> simSets = new HashMap<>();
+        if(!t2.isSimple())
+            if(t1.isSimple()){
+                simSets.put(t1, similarSet(t1, t2));
+            }else{
+                for (NamedType t : t1.getTypeSet()){
+                    simSets.putAll(similarSets(t, t2));
+                }
             }
-        }
         return simSets;
     }
 
     public static boolean isAdaptable(NamedType t1, NamedType t2){
         if(t2.isSimple()){
-            if(!similarSet((SimpleNamedType) t2,t1).isEmpty()) return true;
+            if(!similarSet(t2, t1).isEmpty()) return true;
             else return false;
         }else{
-            for (var e : similarSets(t2,(CompositeNamedType) t1).entrySet()){
+            for (var e : similarSets(t2, t1).entrySet()){
                 if(e.getValue().isEmpty()) return false;
             }
             return true;
@@ -76,7 +80,7 @@ public class Utils {
 
     public static boolean isCompatible(NamedType t1, NamedType t2) {
         if (t1.isSimple() && t2.isSimple()) {
-            if (t1.getName().equals(t2.getName()) && ((SimpleNamedType) t1).getXMLType().equals(((SimpleNamedType) t2).getXMLType()))
+            if (t1.getName().equals(t2.getName()) && t1.getXMLType().equals(t2.getXMLType()))
                 return true;
             else return false;
         } else if ((t1.isSimple() && !t2.isSimple()) || (!t1.isSimple() && t2.isSimple())) {
@@ -84,9 +88,9 @@ public class Utils {
         } else {
             if (!t1.getName().equals(t2.getName())) return false;
             boolean found = false;
-            for (NamedType t : ((CompositeNamedType) t2).getTypeSet()) {
+            for (NamedType t : t2.getTypeSet()) {
                 found = false;
-                for (NamedType u : ((CompositeNamedType) t1).getTypeSet()) {
+                for (NamedType u : t1.getTypeSet()) {
                     if (isCompatible(t, u)) {
                         found = true;
                         break;

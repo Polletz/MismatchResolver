@@ -23,16 +23,6 @@ public class IntegrationNode {
         this.outputs = outputs;
     }
 
-    public IntegrationNode(
-            @JsonProperty String sort,
-            @JsonProperty List<NamedType> inputs,
-            @JsonProperty List<NamedType> outputs
-    ) {
-        this.sort = sort;
-        this.inputs = inputs;
-        this.outputs = outputs;
-    }
-
     public void setId(int id) {
         this.id = id;
     }

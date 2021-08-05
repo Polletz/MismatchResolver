@@ -45,6 +45,7 @@ public class IntegrationArchitecture {
         List<Channel> newChannels = new ArrayList<>();
 
         IntegrationNode t = new IntegrationNode(
+                -1,
                 "translator",
                 List.of(ts),
                 List.of(c.getDestType())
@@ -69,6 +70,7 @@ public class IntegrationArchitecture {
             );
         }else{
             IntegrationNode cf = new IntegrationNode(
+                    -1,
                     "contentFilter",
                     List.of(c.getSourceType()),
                     List.of(ts)
@@ -97,19 +99,20 @@ public class IntegrationArchitecture {
         channels = Utils.union(channels, newChannels);
     }
 
-    private void adaptToComposite(Channel c, Map<SimpleNamedType, SimpleNamedType> chosenSimilarSet){
+    private void adaptToComposite(Channel c, Map<NamedType, NamedType> chosenSimilarSet){
         List<IntegrationNode> newNodes = new ArrayList<>();
         List<Channel> newChannels = new ArrayList<>();
 
-        CompositeNamedType filterSet = new CompositeNamedType("filterSet", new ArrayList<>());
-        CompositeNamedType translatedFilterSet = new CompositeNamedType("translatedFilterSet", new ArrayList<>());
+        NamedType filterSet = new NamedType("filterSet", null, new ArrayList<>(), "composite");
+        NamedType translatedFilterSet = new NamedType("translatedFilterSet", null, new ArrayList<>(), "composite");
 
-        for(SimpleNamedType t : Utils.leaves((CompositeNamedType) c.getDestType())){
+        for(NamedType t : Utils.leaves(c.getDestType())){
             filterSet.getTypeSet().add(chosenSimilarSet.get(t));
             translatedFilterSet.getTypeSet().add(t);
         }
 
         IntegrationNode cf = new IntegrationNode(
+                -1,
                 "contentFilter",
                 List.of(c.getSourceType()),
                 filterSet.getTypeSet()
@@ -117,6 +120,7 @@ public class IntegrationArchitecture {
         cf.setId(idGenerator.getUniqueId());
 
         IntegrationNode t = new IntegrationNode(
+                -1,
                 "translator",
                 filterSet.getTypeSet(),
                 translatedFilterSet.getTypeSet()
@@ -124,6 +128,7 @@ public class IntegrationArchitecture {
         t.setId(idGenerator.getUniqueId());
 
         IntegrationNode w = new IntegrationNode(
+                -1,
                 "translator",
                 translatedFilterSet.getTypeSet(),
                 List.of(c.getDestType())
@@ -149,13 +154,13 @@ public class IntegrationArchitecture {
             if (!Utils.isCompatible(c.getSourceType(),c.getDestType()) && Utils.isAdaptable(c.getSourceType(), c.getDestType())) {
                 channelsToRemove.add(c);
                 if (c.getDestType().isSimple()){
-                    SimpleNamedType ts;
-                    if (c.getSourceType().isSimple()) ts = (SimpleNamedType) c.getSourceType();
-                    else ts = Utils.similarSet((SimpleNamedType) c.getDestType(), c.getSourceType()).get(0);
+                    NamedType ts;
+                    if (c.getSourceType().isSimple()) ts = c.getSourceType();
+                    else ts = Utils.similarSet(c.getDestType(), c.getSourceType()).get(0);
                     adaptToSimple(c, ts);
                 }else{
-                    var simsets = Utils.similarSets(c.getSourceType(),(CompositeNamedType) c.getDestType());
-                    Map<SimpleNamedType, SimpleNamedType> chosenSimilarSet = new HashMap<>();
+                    var simsets = Utils.similarSets(c.getSourceType(), c.getDestType());
+                    Map<NamedType, NamedType> chosenSimilarSet = new HashMap<>();
                     for (var e : simsets.entrySet())
                         chosenSimilarSet.put(e.getKey(), e.getValue().get(0));
 

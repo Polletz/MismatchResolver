@@ -56,7 +56,7 @@ public class RouteParser {
             return node.getParentNode();
         }
         for (Node child : node.getChildNodes()){
-            var configureNode = findConfigureNode(child);
+            Optional<Node> configureNode = findConfigureNode(child);
             if(configureNode.isPresent())
                 return configureNode;
         }
@@ -107,6 +107,7 @@ public class RouteParser {
                             case "setProperty":
                             case "enrich":
                                 n = new IntegrationNode(
+                                        -1,
                                         Utils.matchCommand(nodeCommand) + " -> " + arguments.trim(),
                                         new ArrayList<>(),
                                         new ArrayList<>()
@@ -157,6 +158,7 @@ public class RouteParser {
                                 String[] argument = arguments.split(",");
                                 for (String s : argument) {
                                     n = new IntegrationNode(
+                                            -1,
                                             NODE_TYPE.ENDPOINT + " -> " + s.trim(),
                                             new ArrayList<>(),
                                             new ArrayList<>());
@@ -208,6 +210,7 @@ public class RouteParser {
                                 break;
                             case "choice": //BRANCH THE ROUTE AMONG MULTIPLE SUB-ROUTES
                                 n = new IntegrationNode(
+                                        -1,
                                         Utils.matchCommand(nodeCommand),
                                         new ArrayList<>(),
                                         new ArrayList<>()
