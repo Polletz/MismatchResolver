@@ -40,6 +40,10 @@ public class IntegrationArchitecture {
         this.channels = channels;
     }
 
+    public void setIdGenerator(int id){
+        this.idGenerator.setUniqueId(id);
+    }
+
     private void adaptToSimple(Channel c, NamedType ts){
         List<IntegrationNode> newNodes = new ArrayList<>();
         List<Channel> newChannels = new ArrayList<>();
@@ -63,9 +67,9 @@ public class IntegrationArchitecture {
             newChannels.add(
               new Channel(
                       c.getSource(),
-                      c.getDestType(),
-                      c.getDest(),
-                      c.getDestType()
+                      c.getSourceType(),
+                      t.getId(),
+                      c.getSourceType()
               )
             );
         }else{
@@ -129,7 +133,7 @@ public class IntegrationArchitecture {
 
         IntegrationNode w = new IntegrationNode(
                 -1,
-                "translator",
+                "translator_wrapper",
                 translatedFilterSet.getTypeSet(),
                 List.of(c.getDestType())
         );
@@ -142,7 +146,6 @@ public class IntegrationArchitecture {
                 new Channel(t.getId(),translatedFilterSet,w.getId(),translatedFilterSet),
                 new Channel(w.getId(),c.getDestType(),c.getDest(),c.getDestType())
         ));
-
         nodes = Utils.union(nodes, newNodes);
         //channels.remove(c);
         channels = Utils.union(channels, newChannels);
@@ -159,10 +162,11 @@ public class IntegrationArchitecture {
                     else ts = Utils.similarSet(c.getDestType(), c.getSourceType()).get(0);
                     adaptToSimple(c, ts);
                 }else{
+                    //TODO here the choice of the best type is made with get(0) waiting for other implementations
                     var simsets = Utils.similarSets(c.getSourceType(), c.getDestType());
                     Map<NamedType, NamedType> chosenSimilarSet = new HashMap<>();
                     for (var e : simsets.entrySet())
-                        chosenSimilarSet.put(e.getKey(), e.getValue().get(0));
+                        chosenSimilarSet.put(e.getValue().get(0), e.getKey());
 
                     adaptToComposite(c, chosenSimilarSet);
                 }

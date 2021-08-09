@@ -1,9 +1,9 @@
 package com.rpaoletti.examples;
 
-//import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 
-public class RouteExample {//extends RouteBuilder {
-/*
+public class RouteExample extends RouteBuilder {
+
     @Override
     public void configure() throws Exception {
         from("a")
@@ -19,5 +19,5 @@ public class RouteExample {//extends RouteBuilder {
                     .process("c").endChoice()
             .end()
             .to("d");
-    }*/
+    }
 }

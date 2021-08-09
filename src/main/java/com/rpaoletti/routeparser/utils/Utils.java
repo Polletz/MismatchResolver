@@ -8,14 +8,16 @@ public class Utils {
 
     public static boolean isCastable(NamedType t1, NamedType t2){
         if(t1.isSimple() && t2.isSimple())
-            return t1.getName().equals(t2.getName());
+            return true;
+            //return t1.getName().equals(t2.getName());
         else
             return false;
     }
 
     public static boolean isSemanticallySimilar(NamedType t1, NamedType t2){
         if(t1.isSimple() && t2.isSimple())
-            return t1.getXMLType().equals(t2.getXMLType());
+            return true;
+            //return t1.getXMLType().equals(t2.getXMLType());
         else return false;
     }
 

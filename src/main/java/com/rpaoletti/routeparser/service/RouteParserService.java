@@ -51,8 +51,8 @@ public class RouteParserService {
     }
 
     public void setArchitecture(IntegrationArchitecture architecture){
-        System.out.println("Received Architecture : " + architecture);
         this.routeParser.A = architecture;
+        this.routeParser.A.setIdGenerator(this.routeParser.A.getNodes().size());
     }
 
     public IntegrationArchitecture getFixedArchitecture(){

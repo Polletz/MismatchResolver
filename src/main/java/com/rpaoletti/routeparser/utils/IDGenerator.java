@@ -11,4 +11,8 @@ public class IDGenerator {
     {
         return uniqueId++;
     }
+
+    public void setUniqueId(int uniqueId) {
+        this.uniqueId = uniqueId;
+    }
 }
