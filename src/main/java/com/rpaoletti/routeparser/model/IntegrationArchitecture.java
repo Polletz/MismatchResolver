@@ -10,6 +10,7 @@ public class IntegrationArchitecture {
 
     private @JsonProperty List<IntegrationNode> nodes;
     private @JsonProperty List<Channel> channels;
+    private @JsonProperty List<Channel> mismatches;
 
     private IDGenerator idGenerator;
 
@@ -17,6 +18,7 @@ public class IntegrationArchitecture {
         nodes = new ArrayList<>();
         channels = new ArrayList<>();
         idGenerator = new IDGenerator();
+        mismatches = new ArrayList<>();
     }
 
     public void insertNode(IntegrationNode node){
@@ -50,7 +52,7 @@ public class IntegrationArchitecture {
 
         IntegrationNode t = new IntegrationNode(
                 -1,
-                "translator",
+                "TRANSLATOR",
                 List.of(ts),
                 List.of(c.getDestType())
         );
@@ -75,7 +77,7 @@ public class IntegrationArchitecture {
         }else{
             IntegrationNode cf = new IntegrationNode(
                     -1,
-                    "contentFilter",
+                    "CONTENT_FILTER",
                     List.of(c.getSourceType()),
                     List.of(ts)
             );
@@ -111,30 +113,30 @@ public class IntegrationArchitecture {
         NamedType translatedFilterSet = new NamedType("translatedFilterSet", null, new ArrayList<>(), "composite");
 
         for(NamedType t : Utils.leaves(c.getDestType())){
-            filterSet.getTypeSet().add(chosenSimilarSet.get(t));
-            translatedFilterSet.getTypeSet().add(t);
+            filterSet.getTypeset().add(chosenSimilarSet.get(t));
+            translatedFilterSet.getTypeset().add(t);
         }
 
         IntegrationNode cf = new IntegrationNode(
                 -1,
-                "contentFilter",
+                "CONTENT_FILTER",
                 List.of(c.getSourceType()),
-                filterSet.getTypeSet()
+                filterSet.getTypeset()
         );
         cf.setId(idGenerator.getUniqueId());
 
         IntegrationNode t = new IntegrationNode(
                 -1,
-                "translator",
-                filterSet.getTypeSet(),
-                translatedFilterSet.getTypeSet()
+                "TRANSLATOR",
+                filterSet.getTypeset(),
+                translatedFilterSet.getTypeset()
         );
         t.setId(idGenerator.getUniqueId());
 
         IntegrationNode w = new IntegrationNode(
                 -1,
-                "translator_wrapper",
-                translatedFilterSet.getTypeSet(),
+                "TRANSLATOR_WRAPPER",
+                translatedFilterSet.getTypeset(),
                 List.of(c.getDestType())
         );
         w.setId(idGenerator.getUniqueId());
@@ -154,21 +156,25 @@ public class IntegrationArchitecture {
     public void mismatchResolver(){
         List<Channel> channelsToRemove = new ArrayList<>();
         for (Channel c : channels){
-            if (!Utils.isCompatible(c.getSourceType(),c.getDestType()) && Utils.isAdaptable(c.getSourceType(), c.getDestType())) {
-                channelsToRemove.add(c);
-                if (c.getDestType().isSimple()){
-                    NamedType ts;
-                    if (c.getSourceType().isSimple()) ts = c.getSourceType();
-                    else ts = Utils.similarSet(c.getDestType(), c.getSourceType()).get(0);
-                    adaptToSimple(c, ts);
-                }else{
-                    //TODO here the choice of the best type is made with get(0) waiting for other implementations
-                    var simsets = Utils.similarSets(c.getSourceType(), c.getDestType());
-                    Map<NamedType, NamedType> chosenSimilarSet = new HashMap<>();
-                    for (var e : simsets.entrySet())
-                        chosenSimilarSet.put(e.getValue().get(0), e.getKey());
+            if (!Utils.isCompatible(c.getSourceType(),c.getDestType())){
+                if(Utils.isAdaptable(c.getSourceType(), c.getDestType())) {
+                    channelsToRemove.add(c);
+                    if (c.getDestType().isSimple()) {
+                        NamedType ts;
+                        if (c.getSourceType().isSimple()) ts = c.getSourceType();
+                        else ts = Utils.similarSet(c.getDestType(), c.getSourceType()).get(0);
+                        adaptToSimple(c, ts);
+                    } else {
+                        //TODO here the choice of the best type is made with get(0) waiting for other implementations
+                        var simsets = Utils.similarSets(c.getSourceType(), c.getDestType());
+                        Map<NamedType, NamedType> chosenSimilarSet = new HashMap<>();
+                        for (var e : simsets.entrySet())
+                            chosenSimilarSet.put(e.getValue().get(0), e.getKey());
 
-                    adaptToComposite(c, chosenSimilarSet);
+                        adaptToComposite(c, chosenSimilarSet);
+                    }
+                }else{
+                    mismatches.add(c);
                 }
             }
         }
@@ -181,6 +187,7 @@ public class IntegrationArchitecture {
         return "IntegrationArchitecture{" +
                 "nodes=" + nodes +
                 ", channels=" + channels +
+                ", mismatches=" + mismatches +
                 '}';
     }
 }

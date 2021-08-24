@@ -23,48 +23,58 @@ public class RouteParserController {
     }
 
     @PostMapping(path = "parser/route")
-    public void addRoute(@RequestBody RouteParser parser){
+    public void setRoute(@RequestBody RouteParser parser){
+        System.out.println("POST REQUEST RECEIVED AT parser/route WITH BODY : " + parser);
         routeParserService.addRouteParser(parser);
         routeParserService.parseRoute();
     }
 
     @GetMapping(path = "parser/route")
     public String getCurrentRoute(){
+        System.out.println("GET REQUEST RECEIVED AT parser/route");
         return routeParserService.getRoute();
     }
 
     @GetMapping(path = "integration/nodes")
-    public List<IntegrationNode> getNodes(){
+    public List<IntegrationNode> getNodes()
+    {
+        System.out.println("GET REQUEST RECEIVED AT integration/nodes");
         return routeParserService.getNodes();
     }
 
     @GetMapping(path = "integration/channels")
     public List<Channel> getChannels() {
+        System.out.println("GET REQUEST RECEIVED AT integration/channel");
         return routeParserService.getChannels();
     }
 
     @PostMapping(path = "integration/addNode")
     public void insertNode(@RequestBody IntegrationNode node){
+        System.out.println("POST REQUEST RECEIVED AT integration/addNode WITH BODY : " + node);
         this.routeParserService.addNode(node);
     }
 
     @PostMapping(path = "integration/addChannel")
     public void insertChannel(@RequestBody Channel c){
+        System.out.println("POST REQUEST RECEIVED AT integration/addChannel WITH BODY : " + c);
         this.routeParserService.addChannel(c);
     }
 
     @GetMapping(path = "parser/integration")
     public String getIntegration(){
+        System.out.println("GET REQUEST RECEIVED AT parser/integration");
         return routeParserService.getIntegration();
     }
 
     @PostMapping(path = "integration")
     public void setArchitecture(@RequestBody IntegrationArchitecture architecture){
+        System.out.println("POST REQUEST RECEIVED AT integration WITH BODY : " + architecture);
         this.routeParserService.setArchitecture(architecture);
     }
 
     @GetMapping(path = "integration/fixed")
     public IntegrationArchitecture getFixedArchitecture(){
+        System.out.println("GET REQUEST RECEIVED AT integration/fixed");
         return this.routeParserService.getFixedArchitecture();
     }
 }

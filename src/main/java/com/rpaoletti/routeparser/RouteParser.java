@@ -42,8 +42,6 @@ public class RouteParser {
         if(configureNode.isPresent()){
             Optional<List<Node>> routes = null;
             routes = findRoutes(configureNode.get());
-            List<IntegrationNode> newNodes = null;
-            List<Channel> newChannels = null;
             if(routes.isPresent()) getNewNodesAndChannels(routes.get());
         }else{
             System.out.println("Insert a valid Java File");
@@ -108,7 +106,7 @@ public class RouteParser {
                             case "enrich":
                                 n = new IntegrationNode(
                                         -1,
-                                        Utils.matchCommand(nodeCommand) + " -> " + arguments.trim(),
+                                        Utils.matchCommand(nodeCommand),// + " -> " + arguments.trim(),
                                         new ArrayList<>(),
                                         new ArrayList<>()
                                 );
@@ -159,7 +157,7 @@ public class RouteParser {
                                 for (String s : argument) {
                                     n = new IntegrationNode(
                                             -1,
-                                            NODE_TYPE.ENDPOINT + " -> " + s.trim(),
+                                            NODE_TYPE.ENDPOINT.toString(),// + " -> " + s.trim(),
                                             new ArrayList<>(),
                                             new ArrayList<>());
                                     A.insertNode(n);

@@ -7,20 +7,19 @@ import java.util.List;
 public class NamedType {
 
     private String name;
-    private String XMLType;
-    private List<NamedType> typeSet;
-
+    private String xmltype;
+    private List<NamedType> typeset;
     private String type;
 
     public NamedType(
             @JsonProperty String name,
-            @JsonProperty String XMLType,
-            @JsonProperty List<NamedType> typeSet,
+            @JsonProperty String xmltype,
+            @JsonProperty List<NamedType> typeset,
             @JsonProperty String type
     ) {
         this.name = name;
-        this.XMLType = XMLType;
-        this.typeSet = typeSet;
+        this.xmltype = xmltype;
+        this.typeset = typeset;
         this.type = type;
     }
 
@@ -28,12 +27,12 @@ public class NamedType {
         return this.name;
     };
 
-    public String getXMLType() {
-        return XMLType;
+    public String getXmltype() {
+        return xmltype;
     }
 
-    public List<NamedType> getTypeSet() {
-        return typeSet;
+    public List<NamedType> getTypeset() {
+        return typeset;
     }
 
     public boolean isSimple() {
@@ -45,13 +44,13 @@ public class NamedType {
         if(type.equals("simple")) {
             return "NamedType{" +
                     "name='" + name + '\'' +
-                    ", XMLType='" + XMLType + '\'' +
+                    ", xmltype='" + xmltype + '\'' +
                     ", type='" + type + '\'' +
                     '}';
         }else{
             return "NamedType{" +
                     "name='" + name + '\'' +
-                    ", typeSet=" + typeSet +
+                    ", typeset=" + typeset +
                     ", type='" + type + '\'' +
                     '}';
         }

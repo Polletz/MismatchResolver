@@ -8,8 +8,8 @@ public class Utils {
 
     public static boolean isCastable(NamedType t1, NamedType t2){
         if(t1.isSimple() && t2.isSimple())
-            return true;
-            //return t1.getName().equals(t2.getName());
+            if(t1.getXmltype().equals(t2.getXmltype())) return true;
+            else return false;
         else
             return false;
     }
@@ -17,7 +17,6 @@ public class Utils {
     public static boolean isSemanticallySimilar(NamedType t1, NamedType t2){
         if(t1.isSimple() && t2.isSimple())
             return true;
-            //return t1.getXMLType().equals(t2.getXMLType());
         else return false;
     }
 
@@ -32,7 +31,7 @@ public class Utils {
 
     public static List<NamedType> leaves(NamedType t){
         List<NamedType> leaves = new ArrayList<>();
-        for(NamedType u : t.getTypeSet()){
+        for(NamedType u : t.getTypeset()){
             if(u.isSimple()) leaves.add(u);
             else leaves = union(leaves, leaves(u));
         }
@@ -48,7 +47,7 @@ public class Utils {
                 }
                 return set;
             }else{
-                for (NamedType t : t2.getTypeSet()){
+                for (NamedType t : t2.getTypeset()){
                     set = Utils.union(set, similarSet(t1, t));
                 }
             }
@@ -61,7 +60,7 @@ public class Utils {
             if(t1.isSimple()){
                 simSets.put(t1, similarSet(t1, t2));
             }else{
-                for (NamedType t : t1.getTypeSet()){
+                for (NamedType t : t1.getTypeset()){
                     simSets.putAll(similarSets(t, t2));
                 }
             }
@@ -71,9 +70,13 @@ public class Utils {
     public static boolean isAdaptable(NamedType t1, NamedType t2){
         if(t2.isSimple()){
             if(!similarSet(t2, t1).isEmpty()) return true;
-            else return false;
+            else {
+                return false;
+            }
         }else{
-            for (var e : similarSets(t2, t1).entrySet()){
+            var simset = similarSets(t2, t1);
+            if (simset.isEmpty()) return false;
+            for (var e : simset.entrySet()){
                 if(e.getValue().isEmpty()) return false;
             }
             return true;
@@ -82,7 +85,7 @@ public class Utils {
 
     public static boolean isCompatible(NamedType t1, NamedType t2) {
         if (t1.isSimple() && t2.isSimple()) {
-            if (t1.getName().equals(t2.getName()) && t1.getXMLType().equals(t2.getXMLType()))
+            if (t1.getName().equals(t2.getName()) && t1.getXmltype().equals(t2.getXmltype()))
                 return true;
             else return false;
         } else if ((t1.isSimple() && !t2.isSimple()) || (!t1.isSimple() && t2.isSimple())) {
@@ -90,9 +93,9 @@ public class Utils {
         } else {
             if (!t1.getName().equals(t2.getName())) return false;
             boolean found = false;
-            for (NamedType t : t2.getTypeSet()) {
+            for (NamedType t : t2.getTypeset()) {
                 found = false;
-                for (NamedType u : t1.getTypeSet()) {
+                for (NamedType u : t1.getTypeset()) {
                     if (isCompatible(t, u)) {
                         found = true;
                         break;
