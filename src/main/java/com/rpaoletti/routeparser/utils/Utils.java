@@ -124,7 +124,9 @@ public class Utils {
             "endChoice",
             "end",
             "when",
-            "otherwise"
+            "otherwise",
+            "multicast",
+            "recipientList"
     );
 
     public static String matchCommand(String command){
@@ -152,6 +154,10 @@ public class Utils {
                 return NODE_TYPE.MESSAGE_TRANSFORMER.toString();
             case "enrich":
                 return NODE_TYPE.CONTENT_ENRICHER.toString();
+            case "multicast":
+                return NODE_TYPE.MULTICAST.toString();
+            case "recipientList":
+                return NODE_TYPE.RECIPIENT_LIST.toString();
             default:
                 return null;
         }

@@ -60,4 +60,13 @@ public class IntegrationNode {
                 ", outputs=" + outputs +
                 '}';
     }
+
+    public boolean equals(IntegrationNode node) {
+        String[] arguments = node.getSort().split(":");
+        if (arguments.length <= 1) return false;
+        if (this.sort.split(":").length <= 1) return false;
+        String endpoint = arguments[1];
+        if (endpoint.equals(this.sort.split(":")[1])) return true;
+        return false;
+    }
 }

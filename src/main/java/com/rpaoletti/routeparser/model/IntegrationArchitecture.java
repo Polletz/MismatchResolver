@@ -21,9 +21,17 @@ public class IntegrationArchitecture {
         mismatches = new ArrayList<>();
     }
 
-    public void insertNode(IntegrationNode node){
-        node.setId(idGenerator.getUniqueId());
-        nodes.add(node);
+    public int insertNode(IntegrationNode node){
+        int id = -1;
+        for(int i=0;i<nodes.size();i++){
+            if (nodes.get(i).equals(node)){ id=nodes.get(i).getId() ; break; }
+        }
+        if (id==-1) {
+            node.setId(idGenerator.getUniqueId());
+            nodes.add(node);
+            id = node.getId();
+        }
+        return id;
     }
 
     public void insertChannel(Channel c){
