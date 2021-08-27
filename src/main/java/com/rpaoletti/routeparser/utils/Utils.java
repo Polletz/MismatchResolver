@@ -16,7 +16,8 @@ public class Utils {
 
     public static boolean isSemanticallySimilar(NamedType t1, NamedType t2){
         if(t1.isSimple() && t2.isSimple())
-            return true;
+            if(t1.getName().equals(t2.getName())) return true;
+            else return false;
         else return false;
     }
 

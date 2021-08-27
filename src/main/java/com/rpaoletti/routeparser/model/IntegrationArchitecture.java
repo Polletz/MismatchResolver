@@ -35,7 +35,13 @@ public class IntegrationArchitecture {
     }
 
     public void insertChannel(Channel c){
-        channels.add(c);
+        int pos = -1;
+        for(int i=0;i<channels.size();i++){
+            if (channels.get(i).equals(c)){ pos=i; break; }
+        }
+        if (pos==-1){
+            channels.add(c);
+        }
     }
 
     public List<IntegrationNode> getNodes() {
@@ -143,7 +149,7 @@ public class IntegrationArchitecture {
 
         IntegrationNode w = new IntegrationNode(
                 -1,
-                "TRANSLATOR_WRAPPER",
+                "TR_WRAPPER",
                 translatedFilterSet.getTypeset(),
                 List.of(c.getDestType())
         );

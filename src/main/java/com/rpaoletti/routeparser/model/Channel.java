@@ -46,4 +46,24 @@ public class Channel {
                 ", destType=" + destType +
                 '}';
     }
+
+    public boolean equals (Channel c) {
+        if (this.source == c.source && this.dest == c.dest) {
+            if (this.sourceType == null && c.sourceType != null) return false;
+            if (this.sourceType != null && c.sourceType == null) return false;
+            if (this.destType == null && c.destType != null) return false;
+            if (this.destType != null && c.destType == null) return false;
+            if ((this.sourceType == null && c.sourceType == null) || (this.sourceType.equals(c.sourceType))){
+                if ((this.destType == null && c.destType == null) || (this.destType.equals(c.destType))){
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }

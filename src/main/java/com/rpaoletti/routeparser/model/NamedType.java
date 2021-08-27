@@ -35,6 +35,10 @@ public class NamedType {
         return typeset;
     }
 
+    public String getType(){
+        return this.type;
+    }
+
     public boolean isSimple() {
         return type.equals("simple");
     };
