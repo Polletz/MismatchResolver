@@ -127,7 +127,9 @@ public class Utils {
             "when",
             "otherwise",
             "multicast",
-            "recipientList"
+            "recipientList",
+            "translate",
+            "wrap"
     );
 
     public static String matchCommand(String command){
@@ -148,17 +150,20 @@ public class Utils {
             case "process":
                 return NODE_TYPE.PROCESSOR.toString();
             case "filter":
-                return NODE_TYPE.FILTER.toString();
+                return NODE_TYPE.CONTENT_FILTER.toString();
             case "convertBodyTo":
             case "setHeader":
             case "setProperty":
-                return NODE_TYPE.MESSAGE_TRANSFORMER.toString();
+            case "translate":
+                return NODE_TYPE.TRANSLATOR.toString();
             case "enrich":
                 return NODE_TYPE.CONTENT_ENRICHER.toString();
             case "multicast":
                 return NODE_TYPE.MULTICAST.toString();
             case "recipientList":
                 return NODE_TYPE.RECIPIENT_LIST.toString();
+            case "wrap":
+                return NODE_TYPE.TR_WRAPPER.toString();
             default:
                 return null;
         }

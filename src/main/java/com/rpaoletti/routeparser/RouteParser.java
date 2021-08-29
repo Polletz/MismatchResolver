@@ -43,6 +43,7 @@ public class RouteParser {
             Optional<List<Node>> routes = null;
             routes = findRoutes(configureNode.get());
             if(routes.isPresent()) getNewNodesAndChannels(routes.get());
+
         }else{
             System.out.println("Insert a valid Java File");
         }
@@ -105,12 +106,22 @@ public class RouteParser {
                             case "setHeader":
                             case "setProperty":
                             case "enrich":
-                                n = new IntegrationNode(
-                                        -1,
-                                        Utils.matchCommand(nodeCommand) + " : " + arguments.trim(),
-                                        new ArrayList<>(),
-                                        new ArrayList<>()
-                                );
+                            case "translate":
+                            case "wrap":
+                                if(!arguments.equals(""))
+                                    n = new IntegrationNode(
+                                            -1,
+                                            Utils.matchCommand(nodeCommand) + " : " + arguments.trim(),
+                                            new ArrayList<>(),
+                                            new ArrayList<>()
+                                    );
+                                else
+                                    n = new IntegrationNode(
+                                            -1,
+                                            Utils.matchCommand(nodeCommand),
+                                            new ArrayList<>(),
+                                            new ArrayList<>()
+                                    );
                                 node_id = A.insertNode(n);
                                 if (choiceCount > 0) { // IF I AM IN A CHOICE
                                     if (endFlag) { //IF I AM THE FIRST NODE AFTER AN END COMMAND
