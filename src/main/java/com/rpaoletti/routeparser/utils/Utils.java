@@ -16,25 +16,45 @@ public class Utils {
 
     public static boolean isSemanticallySimilar(NamedType t1, NamedType t2){
         if(t1.isSimple() && t2.isSimple())
-            if(t1.getName().equals(t2.getName())) return true;
-            else return false;
+            //TODO solo per le prove
+            //if(t1.getName().equals(t2.getName())) return true;
+            //else return false;
+            return true;
         else return false;
     }
 
-    public static <T> List<T> union(List<T> list1, List<T> list2) {
-        Set<T> set = new HashSet<>();
+    public static <T> List<T> union(List<T> list1, List<T> list2, int index) {
+        List<T> newList = new ArrayList<>();
 
-        set.addAll(list1);
-        set.addAll(list2);
+        for (int i = 0; i < index; i++) {
+            newList.add(list1.get(i));
+        }
 
-        return new ArrayList<>(set);
+
+        //newList.addAll(list1);
+
+        System.out.println("PRIMA");
+        for (T item : newList)
+            System.out.println(item);
+
+        newList.addAll(list2);
+
+        System.out.println("DOPO");
+        for (T item : newList)
+            System.out.println(item);
+
+        for (int i = index; i < list1.size(); i++){
+            newList.add(list1.get(i));
+        }
+
+        return newList;
     }
 
     public static List<NamedType> leaves(NamedType t){
         List<NamedType> leaves = new ArrayList<>();
         for(NamedType u : t.getTypeset()){
             if(u.isSimple()) leaves.add(u);
-            else leaves = union(leaves, leaves(u));
+            else leaves = union(leaves, leaves(u), 0);
         }
         return leaves;
     }
@@ -49,7 +69,7 @@ public class Utils {
                 return set;
             }else{
                 for (NamedType t : t2.getTypeset()){
-                    set = Utils.union(set, similarSet(t1, t));
+                    set = Utils.union(set, similarSet(t1, t), 0);
                 }
             }
         return set;

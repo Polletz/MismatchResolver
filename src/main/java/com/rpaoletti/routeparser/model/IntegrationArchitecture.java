@@ -60,9 +60,18 @@ public class IntegrationArchitecture {
         this.idGenerator.setUniqueId(id);
     }
 
+    private int getIndexOfNodeFromId(int id){
+        for (int i = 0; i < nodes.size(); i++){
+            if (nodes.get(i).getId() == id) return i;
+        }
+        return -1;
+    }
+
     private void adaptToSimple(Channel c, NamedType ts){
         List<IntegrationNode> newNodes = new ArrayList<>();
         List<Channel> newChannels = new ArrayList<>();
+        int nodeIndex = getIndexOfNodeFromId(c.getSource());
+        int channelIndex = channels.indexOf(c);
 
         IntegrationNode t = new IntegrationNode(
                 -1,
@@ -114,14 +123,17 @@ public class IntegrationArchitecture {
                             ts
             ));
         }
-        nodes = Utils.union(nodes, newNodes);
+        nodes = Utils.union(nodes, newNodes, nodeIndex + 1);
         //channels.remove(c);
-        channels = Utils.union(channels, newChannels);
+        channels = Utils.union(channels, newChannels, channelIndex + 1);
     }
 
     private void adaptToComposite(Channel c, Map<NamedType, NamedType> chosenSimilarSet){
         List<IntegrationNode> newNodes = new ArrayList<>();
         List<Channel> newChannels = new ArrayList<>();
+
+        int nodeIndex = getIndexOfNodeFromId(c.getSource());
+        int channelIndex = channels.indexOf(c);
 
         NamedType filterSet = new NamedType("filterSet", null, new ArrayList<>(), "composite");
         NamedType translatedFilterSet = new NamedType("translatedFilterSet", null, new ArrayList<>(), "composite");
@@ -162,9 +174,9 @@ public class IntegrationArchitecture {
                 new Channel(t.getId(),translatedFilterSet,w.getId(),translatedFilterSet),
                 new Channel(w.getId(),c.getDestType(),c.getDest(),c.getDestType())
         ));
-        nodes = Utils.union(nodes, newNodes);
+        nodes = Utils.union(nodes, newNodes, nodeIndex);
         //channels.remove(c);
-        channels = Utils.union(channels, newChannels);
+        channels = Utils.union(channels, newChannels, channelIndex);
     }
 
     public void mismatchResolver(){
