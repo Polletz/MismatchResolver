@@ -59,4 +59,9 @@ public class RouteParserService {
         this.routeParser.A.mismatchResolver();
         return this.routeParser.A;
     }
+
+    public IntegrationArchitecture getAnalyzedArchitecture(){
+        this.routeParser.A.analyze();
+        return this.routeParser.A;
+    }
 }

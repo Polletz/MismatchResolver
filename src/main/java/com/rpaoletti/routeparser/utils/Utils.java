@@ -25,24 +25,13 @@ public class Utils {
         List<T> newList = new ArrayList<>();
 
         for (int i = 0; i < index; i++) {
-            newList.add(list1.get(i));
+            if (list1.get(i) != null) newList.add(list1.get(i));
         }
-
-
-        //newList.addAll(list1);
-
-        System.out.println("PRIMA");
-        for (T item : newList)
-            System.out.println(item);
 
         newList.addAll(list2);
 
-        System.out.println("DOPO");
-        for (T item : newList)
-            System.out.println(item);
-
         for (int i = index; i < list1.size(); i++){
-            newList.add(list1.get(i));
+            if (list1.get(i) != null) newList.add(list1.get(i));
         }
 
         return newList;
@@ -93,9 +82,9 @@ public class Utils {
                 return false;
             }
         }else{
-            var simset = similarSets(t2, t1);
-            if (simset.isEmpty()) return false;
-            for (var e : simset.entrySet()){
+            var simsets = similarSets(t2, t1);
+            if (simsets.isEmpty()) return false;
+            for (var e : simsets.entrySet()){
                 if(e.getValue().isEmpty()) return false;
             }
             return true;

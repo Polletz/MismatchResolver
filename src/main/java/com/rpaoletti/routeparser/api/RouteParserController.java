@@ -77,4 +77,10 @@ public class RouteParserController {
         System.out.println("GET REQUEST RECEIVED AT integration/fixed");
         return this.routeParserService.getFixedArchitecture();
     }
+
+    @GetMapping(path = "integration/analyzed")
+    public IntegrationArchitecture getAnalyzedArchitecture(){
+        System.out.println("GET REQUEST RECEIVED AT integration/analyzed");
+        return this.routeParserService.getAnalyzedArchitecture();
+    }
 }

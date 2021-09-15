@@ -59,4 +59,25 @@ public class NamedType {
                     '}';
         }
     }
+
+    public boolean equals (NamedType t) {
+        if (!this.name.equals(t.name)) return false;
+        if (!this.type.equals(t.type)) return false;
+        if (!this.xmltype.equals(t.xmltype)) return false;
+
+        if (this.typeset.size() == t.typeset.size()) {
+            for (NamedType nt : this.typeset) {
+                boolean found = false;
+                for (NamedType nt2 : t.typeset) {
+                    if (nt.equals(nt2)) {
+                        found = true;
+                    }
+                }
+                if (!found) return false;
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
 }

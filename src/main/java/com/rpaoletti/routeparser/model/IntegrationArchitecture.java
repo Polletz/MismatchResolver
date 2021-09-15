@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rpaoletti.routeparser.utils.IDGenerator;
 import com.rpaoletti.routeparser.utils.Utils;
 
+import javax.sound.midi.SysexMessage;
 import java.util.*;
 
 public class IntegrationArchitecture {
@@ -139,9 +140,17 @@ public class IntegrationArchitecture {
         NamedType translatedFilterSet = new NamedType("translatedFilterSet", null, new ArrayList<>(), "composite");
 
         for(NamedType t : Utils.leaves(c.getDestType())){
-            filterSet.getTypeset().add(chosenSimilarSet.get(t));
-            translatedFilterSet.getTypeset().add(t);
+            for (var e : chosenSimilarSet.entrySet()) {
+                if (t.equals(e.getKey())) {
+                    filterSet.getTypeset().add(e.getValue());
+                    translatedFilterSet.getTypeset().add(t);
+                    break;
+                }
+            }
         }
+
+        System.out.println("FILTER SET : ");
+        System.out.println(filterSet);
 
         IntegrationNode cf = new IntegrationNode(
                 -1,
@@ -192,7 +201,7 @@ public class IntegrationArchitecture {
                         adaptToSimple(c, ts);
                     } else {
                         //TODO here the choice of the best type is made with get(0) waiting for other implementations
-                        var simsets = Utils.similarSets(c.getSourceType(), c.getDestType());
+                        var simsets = Utils.similarSets(c.getDestType(), c.getSourceType());
                         Map<NamedType, NamedType> chosenSimilarSet = new HashMap<>();
                         for (var e : simsets.entrySet())
                             chosenSimilarSet.put(e.getValue().get(0), e.getKey());
@@ -206,6 +215,14 @@ public class IntegrationArchitecture {
         }
         for (Channel c : channelsToRemove)
             channels.remove(c);
+    }
+
+    public void analyze () {
+        for (Channel c : channels){
+            if (!Utils.isCompatible(c.getSourceType(),c.getDestType())){
+                mismatches.add(c);
+            }
+        }
     }
 
     @Override
