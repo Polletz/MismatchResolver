@@ -149,9 +149,6 @@ public class IntegrationArchitecture {
             }
         }
 
-        System.out.println("FILTER SET : ");
-        System.out.println(filterSet);
-
         IntegrationNode cf = new IntegrationNode(
                 -1,
                 "CONTENT_FILTER",
