@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.rpaoletti</groupId>
-	<artifactId>mismatchdetector</artifactId>
+	<artifactId>mismatchresolver</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>mismatchdetector</name>
+	<name>mismatchresolver</name>
 	<description>Thesis project for Master Degree</description>
 	<properties>
 		<java.version>11</java.version>
@@ -44,6 +44,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<fork>true</fork>
+					<mainClass>com.rpaoletti.MismatchResolverApplication</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+					<goals>
+						<goal>repackage</goal>
+					</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
